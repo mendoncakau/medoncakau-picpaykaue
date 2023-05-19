@@ -1,0 +1,26 @@
+name: DevTeam Pipeline
+on:
+  push:
+    branches:
+      - DEV
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: |
+          cd src
+          javac -cp . Main.java
+          javac -cp . Teste.java
+
+      - name: Run Automated Tests
+        run: |
+          cd src
+          java -cp . Teste
+
+      - name: Log Versioning
+        run: echo "DEV-1.${{ github.run_number }}" # Gera o versionamento automático
