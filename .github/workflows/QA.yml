@@ -1,0 +1,35 @@
+name: QATeam Pipeline
+on: 
+  pull_request:
+    branches:
+      - QA
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: |
+          cd src
+          javac -cp . Main.java
+          javac -cp . Teste.java
+
+      - name: Run Automated Tests
+        run: |
+          cd src
+          java -cp . Teste
+
+      - name: Log Versioning
+        run: echo "QA-1.${{ github.run_number }}" # Gera o versionamento automático
+
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: kauem/picpay
+          tags: QA-v1.${{ github.run_number}}
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
