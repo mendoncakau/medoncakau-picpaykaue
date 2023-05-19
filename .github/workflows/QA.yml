@@ -1,6 +1,6 @@
 name: QATeam Pipeline
 on: 
-  pull_request:
+  pull_request: 
     branches:
       - QA 
 
